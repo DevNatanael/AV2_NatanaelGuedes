@@ -28,21 +28,13 @@ fechar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] =
 
 cancelar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] == "transação cancelada" if transacoes["status"][transacoes["id"].index(id)] == "pagamento não aprovado" else "erro"
 
-# # criar uma transação de dinheiro
-# criar_transacao(1, "dinheiro")
-# print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['criada']}
+# função para testar a igualdade
+testar_igualdade = lambda x, y: x if x == y else print(f"Erro: {x} != {y}")
 
-# # receber dinheiro para a transação
-# receber_dinheiro(1)
-# print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['dinheiro recebido']}
+# teste unitário 1: Testar uma transação de dinheiro
+teste_transacao_dinheiro = lambda: (criar_transacao(1, "dinheiro"), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['criada']}), receber_dinheiro(1), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['dinheiro recebido']}), completar_transacao(1), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['transação concluída']}))
+teste_transacao_dinheiro()
 
-# # imprimir recibo de pagamento
-# print(imprimir_recibo_pagamento(1))  # saida: recibo de pagamento impresso
-
-# # retornar recibo de pagamento
-# print(retornar_recibo_pagamento(1))  # saida: recibo de pagamento retornado
-
-# # completar a transação
-# completar_transacao(1)
-# print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['transação concluída']}
-
+# teste unitário 2: Testar uma transação de crédito bem-sucedida
+teste_transacao_credito_bem_sucedida = lambda: (criar_transacao(2, "credito"), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['criada']}), solicitar_detalhes_conta(2, "1234-5678-9012-3456"), testar_igualdade(detalhes_conta, {'id': [2], 'detalhes': ['1234-5678-9012-3456']}), solicitar_pagamento_banco(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['pagamento solicitado']}), confirmar_pagamento_banco(2, True), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['pagamento aprovado']}), fornecer_detalhes_deposito_banco(2, "Banco XYZ, Conta: 123456"), testar_igualdade(detalhes_banco, {'id': [2], 'detalhes': ['Banco XYZ, Conta: 123456']}), transferir_fundos(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['fundos transferidos']}), completar_transacao(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['transação concluída']}))
+teste_transacao_credito_bem_sucedida()
