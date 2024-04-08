@@ -1,3 +1,5 @@
+import time
+
 # dicionários para armazenar detalhes da transação
 transacoes = {"id": [], "tipo": [], "status": []}
 detalhes_conta = {"id": [], "detalhes": []}
@@ -38,3 +40,25 @@ teste_transacao_dinheiro()
 # teste unitário 2: Testar uma transação de crédito bem-sucedida
 teste_transacao_credito_bem_sucedida = lambda: (criar_transacao(2, "credito"), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['criada']}), solicitar_detalhes_conta(2, "1234-5678-9012-3456"), testar_igualdade(detalhes_conta, {'id': [2], 'detalhes': ['1234-5678-9012-3456']}), solicitar_pagamento_banco(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['pagamento solicitado']}), confirmar_pagamento_banco(2, True), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['pagamento aprovado']}), fornecer_detalhes_deposito_banco(2, "Banco XYZ, Conta: 123456"), testar_igualdade(detalhes_banco, {'id': [2], 'detalhes': ['Banco XYZ, Conta: 123456']}), transferir_fundos(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['fundos transferidos']}), completar_transacao(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['transação concluída']}))
 teste_transacao_credito_bem_sucedida()
+
+# Teste unitário 3: Testar uma transação de crédito mal-sucedida
+teste_transacao_credito_mal_sucedida = lambda: (criar_transacao(3, "credito"), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['criada']}), solicitar_detalhes_conta(3, "1234-5678-9012-3456"), testar_igualdade(detalhes_conta, {'id': [3], 'detalhes': ['1234-5678-9012-3456']}), solicitar_pagamento_banco(3), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['pagamento solicitado']}), confirmar_pagamento_banco(3, False), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['pagamento não aprovado']}))
+teste_transacao_credito_mal_sucedida()
+
+# Teste de stress: Criar um grande número de transações e medir o tempo que leva para processá-las
+teste_stress = lambda: (
+    # Limpar as listas de transações anteriores
+    transacoes["id"].clear(),
+    transacoes["tipo"].clear(),
+    transacoes["status"].clear(),
+    # Iniciar o tempo
+    start_time := time.time(),
+    # Criar 50 mil transações de dinheiro
+    [(criar_transacao(i, "dinheiro"), receber_dinheiro(i), completar_transacao(i)) for i in range(50000)],
+    # Parar o tempo
+    end_time := time.time(),
+    # Imprimir o tempo que levou para processar 1 milhão de transações
+    print(f"Tempo para processar 50 mil transações: {end_time - start_time} segundos")
+)
+teste_stress()
+
