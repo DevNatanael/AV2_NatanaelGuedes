@@ -32,52 +32,17 @@ cancelar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)]
 criar_transacao(1, "dinheiro")
 print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['criada']}
 
-# Receber dinheiro para a transação
+# receber dinheiro para a transação
 receber_dinheiro(1)
 print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['dinheiro recebido']}
 
-# Imprimir recibo de pagamento
+# imprimir recibo de pagamento
 print(imprimir_recibo_pagamento(1))  # saida: recibo de pagamento impresso
 
-# Retornar recibo de pagamento
+# retornar recibo de pagamento
 print(retornar_recibo_pagamento(1))  # saida: recibo de pagamento retornado
 
-# Completar a transação
+# completar a transação
 completar_transacao(1)
 print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['transação concluída']}
 
-print("-----------")
-
-# Criar uma transação de crédito
-criar_transacao(2, "credito")
-print(transacoes)  # saida: {'id': [1, 2], 'tipo': ['dinheiro', 'credito'], 'status': ['transação concluída', 'criada']}
-
-# Solicitar detalhes da conta
-solicitar_detalhes_conta(2, "1234-5678-9012-3456")
-print(detalhes_conta)  # saida: {'id': [2], 'detalhes': ['1234-5678-9012-3456']}
-
-# Solicitar pagamento do banco
-solicitar_pagamento_banco(2)
-print(transacoes)  # saida: {'id': [1, 2], 'tipo': ['dinheiro', 'credito'], 'status': ['transação concluída', 'pagamento solicitado']}
-
-# Confirmar aprovação do pagamento pelo banco
-confirmar_pagamento_banco(2, True)
-print(transacoes)  # saida: {'id': [1, 2], 'tipo': ['dinheiro', 'credito'], 'status': ['transação concluída', 'pagamento aprovado']}
-
-# Fornecer detalhes de depósito do banco
-fornecer_detalhes_deposito_banco(2, "Banco XYZ, Conta: 123456")
-print(detalhes_banco)  # saida: {'id': [2], 'detalhes': ['Banco XYZ, Conta: 123456']}
-
-# Transferir fundos
-transferir_fundos(2)
-print(transacoes)  # saida: {'id': [1, 2], 'tipo': ['dinheiro', 'credito'], 'status': ['transação concluída', 'fundos transferidos']}
-
-# Imprimir recibo de pagamento
-print(imprimir_recibo_pagamento(2))  # saida: recibo de pagamento impresso
-
-# Retornar recibo de pagamento
-print(retornar_recibo_pagamento(2))  # saida: recibo de pagamento retornado
-
-# Completar a transação
-completar_transacao(2)
-print(transacoes)  # saida: {'id': [1, 2], 'tipo': ['dinheiro', 'credito'], 'status': ['transação concluída', 'transação concluída']}
