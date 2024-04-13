@@ -5,10 +5,13 @@ transacoes = {"id": [], "tipo": [], "status": []}
 detalhes_conta = {"id": [], "detalhes": []}
 detalhes_banco = {"id": [], "detalhes": []}
 
+contas_correntes = {"id": [], "saldo": []}
+senhas = {"id": [], "senha": []}
+
 # funções lambda
 criar_transacao = lambda id, tipo: [transacoes[chave].append(valor) for chave, valor in {"id": id, "tipo": tipo, "status": "criada"}.items()] and (detalhes_conta["id"].append(id) and detalhes_conta["detalhes"].append(None) if tipo == "credito" else None) and print("Criando transação")
 
-receber_dinheiro = lambda id: [transacoes["status"].__setitem__(transacoes["id"].index(id), "dinheiro recebido") if transacoes["tipo"][transacoes["id"].index(id)] == "dinheiro" else "erro"] and print("Recebendo dinheiro")
+receber_dinheiro = lambda id: [transacoes["status"].__setitem__(transacoes["id"].index(id), "dinheiro recebido") if transacoes["tipo"][transacoes["id"].index(id)] == "dinheiro" else "erro"] and print("Dinheiro Recebido")
 
 solicitar_detalhes_conta = lambda id, detalhes: [detalhes_conta["detalhes"].append(detalhes) if transacoes["tipo"][transacoes["id"].index(id)] == "credito" else "erro"] and print("Solicitando detalhes de crédito da conta")
 
@@ -29,6 +32,11 @@ completar_transacao = lambda id: [transacoes["status"].__setitem__(transacoes["i
 fechar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] == "transação fechada" if transacoes["status"][transacoes["id"].index(id)] in ["dinheiro recebido", "fundos transferidos"] else "erro"
 
 cancelar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] == "transação cancelada" if transacoes["status"][transacoes["id"].index(id)] == "pagamento não aprovado" else "erro"
+
+criar_usuario = lambda id, senha: (senhas["id"].append(id), senhas["senha"].append(senha), contas_correntes["id"].append(id), contas_correntes["saldo"].append(0), print("Usuário criado"))
+
+atualizar_conta_corrente = lambda id, valor: [contas_correntes["saldo"].__setitem__(contas_correntes["id"].index(id), contas_correntes["saldo"][contas_correntes["id"].index(id)] + valor) if id in contas_correntes["id"] else "erro"] and print("Conta corrente atualizada")
+
 
 # função para testar a igualdade
 testar_igualdade = lambda x, y: x if x == y else print(f"Erro: {x} != {y}")
