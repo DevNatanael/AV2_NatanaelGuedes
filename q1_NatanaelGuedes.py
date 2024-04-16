@@ -3,17 +3,14 @@ transacoes = {"id": [], "tipo": [], "status": []}
 detalhes_conta = {"id": [], "detalhes": []}
 detalhes_banco = {"id": [], "detalhes": []}
 
-# Dicionários como expressões lambda
-conta_corrente = lambda: {1: 1000, 2: 500, 3: 1200}
-senha = lambda: {1: "senha1", 2: "senha2", 3: "senha3"}
-
-# Atualizar valor da conta corrente para um dado usuário
-atualizar_conta_corrente = lambda id, novo_valor: conta_corrente().update({id: novo_valor}) if id in conta_corrente() else None
+# dicionários para armazenar detalhes do usuário
+contas_correntes = {"id": [], "saldo": []}
+senhas = {"id": [], "senha": []}
 
 # funções lambda
 criar_transacao = lambda id, tipo: [transacoes[chave].append(valor) for chave, valor in {"id": id, "tipo": tipo, "status": "criada"}.items()] and (detalhes_conta["id"].append(id) and detalhes_conta["detalhes"].append(None) if tipo == "credito" else None) and print("Criando transação")
 
-receber_dinheiro = lambda id: [transacoes["status"].__setitem__(transacoes["id"].index(id), "dinheiro recebido") if transacoes["tipo"][transacoes["id"].index(id)] == "dinheiro" else "erro"] and print("Recebendo dinheiro")
+receber_dinheiro = lambda id: [transacoes["status"].__setitem__(transacoes["id"].index(id), "dinheiro recebido") if transacoes["tipo"][transacoes["id"].index(id)] == "dinheiro" else "erro"] and print("Dinheiro Recebido")
 
 solicitar_detalhes_conta = lambda id, detalhes: [detalhes_conta["detalhes"].append(detalhes) if transacoes["tipo"][transacoes["id"].index(id)] == "credito" else "erro"] and print("Solicitando detalhes de crédito da conta")
 
@@ -35,25 +32,36 @@ fechar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] =
 
 cancelar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] == "transação cancelada" if transacoes["status"][transacoes["id"].index(id)] == "pagamento não aprovado" else "erro"
 
+criar_usuario = lambda id, senha: (senhas["id"].append(id), senhas["senha"].append(senha), contas_correntes["id"].append(id), contas_correntes["saldo"].append(0), print("Usuário criado"))
 
-conta_atualizada = atualizar_conta_corrente(1, 1500)
-print(conta_atualizada)  # Saída: {1: 1500, 2: 500, 3: 1200}
+atualizar_conta_corrente = lambda id, valor: [contas_correntes["saldo"].__setitem__(contas_correntes["id"].index(id), contas_correntes["saldo"][contas_correntes["id"].index(id)] + valor) if id in contas_correntes["id"] else "erro"] and print("Conta corrente atualizada")
 
-# # criar uma transação de dinheiro
-# criar_transacao(1, "dinheiro")
-# print(transacoes)
 
-# # receber dinheiro para a transação
-# receber_dinheiro(1)
-# print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['dinheiro recebido']}
+# criar um usuário
+criar_usuario(1, "senha123")
+print(senhas)
+print(contas_correntes)
 
-# # imprimir recibo de pagamento
-# print(imprimir_recibo_pagamento(1))  # saida: recibo de pagamento impresso
+# criar uma transação de dinheiro
+print("Criando transação")
+criar_transacao(1, "dinheiro")
+print(transacoes)
 
-# # retornar recibo de pagamento
-# print(retornar_recibo_pagamento(1))  # saida: recibo de pagamento retornado
+# atualizar a conta corrente do usuário
+atualizar_conta_corrente(1, 100)
+print(contas_correntes)
 
-# # completar a transação
-# completar_transacao(1)
-# print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['transação concluída']}
+# receber dinheiro para a transação
+receber_dinheiro(1)
+print(transacoes)
+
+# imprimir recibo de pagamento
+print(imprimir_recibo_pagamento(1))
+
+# retornar recibo de pagamento
+print(retornar_recibo_pagamento(1))
+
+# completar a transação
+completar_transacao(1)
+print(transacoes)
 
