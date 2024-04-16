@@ -3,6 +3,13 @@ transacoes = {"id": [], "tipo": [], "status": []}
 detalhes_conta = {"id": [], "detalhes": []}
 detalhes_banco = {"id": [], "detalhes": []}
 
+# Dicionários como expressões lambda
+conta_corrente = lambda: {1: 1000, 2: 500, 3: 1200}
+senha = lambda: {1: "senha1", 2: "senha2", 3: "senha3"}
+
+# Atualizar valor da conta corrente para um dado usuário
+atualizar_conta_corrente = lambda id, novo_valor: conta_corrente().update({id: novo_valor}) if id in conta_corrente() else None
+
 # funções lambda
 criar_transacao = lambda id, tipo: [transacoes[chave].append(valor) for chave, valor in {"id": id, "tipo": tipo, "status": "criada"}.items()] and (detalhes_conta["id"].append(id) and detalhes_conta["detalhes"].append(None) if tipo == "credito" else None) and print("Criando transação")
 
@@ -28,9 +35,13 @@ fechar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] =
 
 cancelar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] == "transação cancelada" if transacoes["status"][transacoes["id"].index(id)] == "pagamento não aprovado" else "erro"
 
+
+conta_atualizada = atualizar_conta_corrente(1, 1500)
+print(conta_atualizada)  # Saída: {1: 1500, 2: 500, 3: 1200}
+
 # # criar uma transação de dinheiro
 # criar_transacao(1, "dinheiro")
-# print(transacoes)  # saida: {'id': [1], 'tipo': ['dinheiro'], 'status': ['criada']}
+# print(transacoes)
 
 # # receber dinheiro para a transação
 # receber_dinheiro(1)
