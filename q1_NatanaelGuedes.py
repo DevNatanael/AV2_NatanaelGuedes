@@ -1,16 +1,16 @@
 # dicionários para armazenar detalhes da transação
-transacoes = {"id": [], "tipo": [], "status": []}
-detalhes_conta = {"id": [], "detalhes": []}
-detalhes_banco = {"id": [], "detalhes": []}
+transacoes = lambda id, tipo, status: {"id": [id], "tipo": [tipo], "status": [status]}
+detalhes_conta = lambda id, detalhes: {"id": [id], "detalhes": [detalhes]}
+detalhes_banco = lambda id, detalhes: {"id": [id], "detalhes": [detalhes]}
 
 # dicionários para armazenar detalhes do usuário
-contas_correntes = {"id": [], "saldo": []}
-senhas = {"id": [], "senha": []}
+contas_correntes = lambda id, saldo: {"id": [id], "saldo": [saldo]}
+senhas = lambda id, senha: {"id": [id], "senha": [senha]}
 
 # funções lambda
-criar_transacao = lambda id, tipo: [transacoes[chave].append(valor) for chave, valor in {"id": id, "tipo": tipo, "status": "criada"}.items()] and (detalhes_conta["id"].append(id) and detalhes_conta["detalhes"].append(None) if tipo == "credito" else None) and print("Criando transação")
+criar_transacao = lambda id, tipo: transacoes(id, tipo, "criada")
 
-receber_dinheiro = lambda id: [transacoes["status"].__setitem__(transacoes["id"].index(id), "dinheiro recebido") if transacoes["tipo"][transacoes["id"].index(id)] == "dinheiro" else "erro"] and print("Dinheiro Recebido")
+receber_dinheiro = lambda id,novaTransacao: novaTransacao["status"].__setitem__(novaTransacao["id"].index(id), "dinheiro recebido") if id in novaTransacao["id"] else print("Transação não encontrada")
 
 solicitar_detalhes_conta = lambda id, detalhes: [detalhes_conta["detalhes"].append(detalhes) if transacoes["tipo"][transacoes["id"].index(id)] == "credito" else "erro"] and print("Solicitando detalhes de crédito da conta")
 
@@ -37,31 +37,31 @@ criar_usuario = lambda id, senha: (senhas["id"].append(id), senhas["senha"].appe
 atualizar_conta_corrente = lambda id, valor: [contas_correntes["saldo"].__setitem__(contas_correntes["id"].index(id), contas_correntes["saldo"][contas_correntes["id"].index(id)] + valor) if id in contas_correntes["id"] else "erro"] and print("Conta corrente atualizada")
 
 
-# criar um usuário
-criar_usuario(1, "senha123")
-print(senhas)
-print(contas_correntes)
+# # criar um usuário
+# criar_usuario(1, "senha123")
+# print(senhas)
+# print(contas_correntes)
 
 # criar uma transação de dinheiro
 print("Criando transação")
-criar_transacao(1, "dinheiro")
-print(transacoes)
+novaTransacao = criar_transacao(1, "dinheiro")
+print(novaTransacao)
 
-# atualizar a conta corrente do usuário
-atualizar_conta_corrente(1, 100)
-print(contas_correntes)
+# # atualizar a conta corrente do usuário
+# atualizar_conta_corrente(1, 100)
+# print(contas_correntes)
 
 # receber dinheiro para a transação
-receber_dinheiro(1)
-print(transacoes)
+receber_dinheiro(1, novaTransacao)
+print(novaTransacao)
 
-# imprimir recibo de pagamento
-print(imprimir_recibo_pagamento(1))
+# # imprimir recibo de pagamento
+# print(imprimir_recibo_pagamento(1))
 
-# retornar recibo de pagamento
-print(retornar_recibo_pagamento(1))
+# # retornar recibo de pagamento
+# print(retornar_recibo_pagamento(1))
 
-# completar a transação
-completar_transacao(1)
-print(transacoes)
+# # completar a transação
+# completar_transacao(1)
+# print(transacoes)
 

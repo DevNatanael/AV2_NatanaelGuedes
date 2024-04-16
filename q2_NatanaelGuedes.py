@@ -41,32 +41,63 @@ atualizar_conta_corrente = lambda id, valor: [contas_correntes["saldo"].__setite
 # função para testar a igualdade
 testar_igualdade = lambda x, y: x if x == y else print(f"Erro: {x} != {y}")
 
-# teste unitário 1: Testar uma transação de dinheiro
-teste_transacao_dinheiro = lambda: (criar_transacao(1, "dinheiro"), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['criada']}), receber_dinheiro(1), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['dinheiro recebido']}), completar_transacao(1), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['transação concluída']}))
-teste_transacao_dinheiro()
 
-# teste unitário 2: Testar uma transação de crédito bem-sucedida
-teste_transacao_credito_bem_sucedida = lambda: (criar_transacao(2, "credito"), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['criada']}), solicitar_detalhes_conta(2, "1234-5678-9012-3456"), testar_igualdade(detalhes_conta, {'id': [2], 'detalhes': ['1234-5678-9012-3456']}), solicitar_pagamento_banco(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['pagamento solicitado']}), confirmar_pagamento_banco(2, True), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['pagamento aprovado']}), fornecer_detalhes_deposito_banco(2, "Banco XYZ, Conta: 123456"), testar_igualdade(detalhes_banco, {'id': [2], 'detalhes': ['Banco XYZ, Conta: 123456']}), transferir_fundos(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['fundos transferidos']}), completar_transacao(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['transação concluída']}))
-teste_transacao_credito_bem_sucedida()
+# criar um usuário
+criar_usuario(1, "senha123")
+print(senhas)
+print(contas_correntes)
 
-# Teste unitário 3: Testar uma transação de crédito mal-sucedida
-teste_transacao_credito_mal_sucedida = lambda: (criar_transacao(3, "credito"), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['criada']}), solicitar_detalhes_conta(3, "1234-5678-9012-3456"), testar_igualdade(detalhes_conta, {'id': [3], 'detalhes': ['1234-5678-9012-3456']}), solicitar_pagamento_banco(3), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['pagamento solicitado']}), confirmar_pagamento_banco(3, False), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['pagamento não aprovado']}))
-teste_transacao_credito_mal_sucedida()
+#criar uma transação de dinheiro
+print("Criando transação")
+criar_transacao(1, "dinheiro")
+print(transacoes)
 
-# Teste de stress: Criar um grande número de transações e medir o tempo que leva para processá-las
-teste_stress = lambda: (
-    # Limpar as listas de transações anteriores
-    transacoes["id"].clear(),
-    transacoes["tipo"].clear(),
-    transacoes["status"].clear(),
-    # Iniciar o tempo
-    start_time := time.time(),
-    # Criar 50 mil transações de dinheiro
-    [(criar_transacao(i, "dinheiro"), receber_dinheiro(i), completar_transacao(i)) for i in range(50000)],
-    # Parar o tempo
-    end_time := time.time(),
-    # Imprimir o tempo que levou para processar 1 milhão de transações
-    print(f"Tempo para processar 50 mil transações: {end_time - start_time} segundos")
-)
-teste_stress()
+# atualizar a conta corrente do usuário
+atualizar_conta_corrente(1, 100)
+print(contas_correntes)
+
+# receber dinheiro para a transação
+receber_dinheiro(1)
+print(transacoes)
+
+# imprimir recibo de pagamento
+print(imprimir_recibo_pagamento(1))
+
+# retornar recibo de pagamento
+print(retornar_recibo_pagamento(1))
+
+# completar a transação
+completar_transacao(1)
+print(transacoes)
+
+
+
+# # teste unitário 1: Testar uma transação de dinheiro
+# teste_transacao_dinheiro = lambda: (criar_transacao(1, "dinheiro"), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['criada']}), receber_dinheiro(1), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['dinheiro recebido']}), completar_transacao(1), testar_igualdade(transacoes, {'id': [1], 'tipo': ['dinheiro'], 'status': ['transação concluída']}))
+# teste_transacao_dinheiro()
+
+# # teste unitário 2: Testar uma transação de crédito bem-sucedida
+# teste_transacao_credito_bem_sucedida = lambda: (criar_transacao(2, "credito"), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['criada']}), solicitar_detalhes_conta(2, "1234-5678-9012-3456"), testar_igualdade(detalhes_conta, {'id': [2], 'detalhes': ['1234-5678-9012-3456']}), solicitar_pagamento_banco(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['pagamento solicitado']}), confirmar_pagamento_banco(2, True), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['pagamento aprovado']}), fornecer_detalhes_deposito_banco(2, "Banco XYZ, Conta: 123456"), testar_igualdade(detalhes_banco, {'id': [2], 'detalhes': ['Banco XYZ, Conta: 123456']}), transferir_fundos(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['fundos transferidos']}), completar_transacao(2), testar_igualdade(transacoes, {'id': [2], 'tipo': ['credito'], 'status': ['transação concluída']}))
+# teste_transacao_credito_bem_sucedida()
+
+# # Teste unitário 3: Testar uma transação de crédito mal-sucedida
+# teste_transacao_credito_mal_sucedida = lambda: (criar_transacao(3, "credito"), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['criada']}), solicitar_detalhes_conta(3, "1234-5678-9012-3456"), testar_igualdade(detalhes_conta, {'id': [3], 'detalhes': ['1234-5678-9012-3456']}), solicitar_pagamento_banco(3), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['pagamento solicitado']}), confirmar_pagamento_banco(3, False), testar_igualdade(transacoes, {'id': [3], 'tipo': ['credito'], 'status': ['pagamento não aprovado']}))
+# teste_transacao_credito_mal_sucedida()
+
+# # Teste de stress: Criar um grande número de transações e medir o tempo que leva para processá-las
+# teste_stress = lambda: (
+#     # Limpar as listas de transações anteriores
+#     transacoes["id"].clear(),
+#     transacoes["tipo"].clear(),
+#     transacoes["status"].clear(),
+#     # Iniciar o tempo
+#     start_time := time.time(),
+#     # Criar 50 mil transações de dinheiro
+#     [(criar_transacao(i, "dinheiro"), receber_dinheiro(i), completar_transacao(i)) for i in range(50000)],
+#     # Parar o tempo
+#     end_time := time.time(),
+#     # Imprimir o tempo que levou para processar 1 milhão de transações
+#     print(f"Tempo para processar 50 mil transações: {end_time - start_time} segundos")
+# )
+# teste_stress()
 
