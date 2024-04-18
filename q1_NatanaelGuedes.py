@@ -3,65 +3,73 @@ transacoes = lambda id, tipo, status: {"id": [id], "tipo": [tipo], "status": [st
 detalhes_conta = lambda id, detalhes: {"id": [id], "detalhes": [detalhes]}
 detalhes_banco = lambda id, detalhes: {"id": [id], "detalhes": [detalhes]}
 
-# dicionários para armazenar detalhes do usuário
+# dicionários para armazenar detalhes da conta do usuário
 contas_correntes = lambda id, saldo: {"id": [id], "saldo": [saldo]}
-senhas = lambda id, senha: {"id": [id], "senha": [senha]}
+
+usuarios = lambda id,senha :{"id": [id], "senha": [senha]}
 
 # funções lambda
 criar_transacao = lambda id, tipo: transacoes(id, tipo, "criada")
 
 receber_dinheiro = lambda id,novaTransacao: novaTransacao["status"].__setitem__(novaTransacao["id"].index(id), "dinheiro recebido") if id in novaTransacao["id"] else print("Transação não encontrada")
 
-solicitar_detalhes_conta = lambda id, detalhes: [detalhes_conta["detalhes"].append(detalhes) if transacoes["tipo"][transacoes["id"].index(id)] == "credito" else "erro"] and print("Solicitando detalhes de crédito da conta")
+solicitar_detalhes_conta = lambda id, detalhes, novaTransacao: [detalhes_conta["detalhes"].append(detalhes) if novaTransacao["tipo"][novaTransacao["id"].index(id)] == "credito" else "erro"] and print("Solicitando detalhes de crédito da conta")
 
-solicitar_pagamento_banco = lambda id: (transacoes["status"].__setitem__(transacoes["id"].index(id), "pagamento solicitado"), print("Solicitando pagamento do banco")) if transacoes["tipo"][transacoes["id"].index(id)] == "credito" else "erro"
+solicitar_pagamento_banco = lambda id, novaTransacao: (novaTransacao["status"].__setitem__(novaTransacao["id"].index(id), "pagamento solicitado"), print("Solicitando pagamento do banco")) if novaTransacao["tipo"][novaTransacao["id"].index(id)] == "credito" else "erro"
 
-confirmar_pagamento_banco = lambda id, aprovado: (transacoes["status"].__setitem__(transacoes["id"].index(id), "pagamento aprovado"), print("Confirme a aprovação do pagamento do banco")) if aprovado else (transacoes["status"].__setitem__(transacoes["id"].index(id), "pagamento não aprovado"), print("Pagamento não aprovado pelo banco"))
+confirmar_pagamento_banco = lambda id, aprovado, novaTransacao: (novaTransacao["status"].__setitem__(novaTransacao["id"].index(id), "pagamento aprovado"), print("Confirme a aprovação do pagamento do banco")) if aprovado else (novaTransacao["status"].__setitem__(novaTransacao["id"].index(id), "pagamento não aprovado"), print("Pagamento não aprovado pelo banco"))
 
-fornecer_detalhes_deposito_banco = lambda id, detalhes: (detalhes_banco["id"].append(id), detalhes_banco["detalhes"].append(detalhes), print("Forneça detalhes de depósito bancário")) if transacoes["status"][transacoes["id"].index(id)] == "pagamento aprovado" else "erro"
+fornecer_detalhes_deposito_banco = lambda id, detalhes,novaTransacao: (detalhes_banco["id"].append(id), detalhes_banco["detalhes"].append(detalhes), print("Forneça detalhes de depósito bancário")) if novaTransacao["status"][novaTransacao["id"].index(id)] == "pagamento aprovado" else "erro"
 
-transferir_fundos = lambda id: (transacoes["status"].__setitem__(transacoes["id"].index(id), "fundos transferidos"), print("Fundos transferidos")) if transacoes["status"][transacoes["id"].index(id)] == "pagamento aprovado" else "erro"
+transferir_fundos = lambda id,novaTransacao: (novaTransacao["status"].__setitem__(novaTransacao["id"].index(id), "fundos transferidos"), print("Fundos transferidos")) if novaTransacao["status"][novaTransacao["id"].index(id)] == "pagamento aprovado" else "erro"
 
-imprimir_recibo_pagamento = lambda id: "recibo de pagamento impresso" if transacoes["status"][transacoes["id"].index(id)] in ["fundos transferidos", "dinheiro recebido"] else "erro"
+imprimir_recibo_pagamento = lambda id, novaTransacao: "recibo de pagamento impresso" if novaTransacao["status"][novaTransacao["id"].index(id)] in ["fundos transferidos", "dinheiro recebido"] else "erro"
 
-retornar_recibo_pagamento = lambda id: "recibo de pagamento retornado" if transacoes["status"][transacoes["id"].index(id)] in ["fundos transferidos", "dinheiro recebido"] else "erro"
+retornar_recibo_pagamento = lambda id,novaTransacao: "recibo de pagamento retornado" if novaTransacao["status"][novaTransacao["id"].index(id)] in ["fundos transferidos", "dinheiro recebido"] else "erro"
 
-completar_transacao = lambda id: [transacoes["status"].__setitem__(transacoes["id"].index(id), "transação concluída") if transacoes["status"][transacoes["id"].index(id)] in ["dinheiro recebido", "fundos transferidos"] else "erro"] and print("Transação Concluida")
+completar_transacao = lambda id,novaTransacao: [novaTransacao["status"].__setitem__(novaTransacao["id"].index(id), "transação concluída") if novaTransacao["status"][novaTransacao["id"].index(id)] in ["dinheiro recebido", "fundos transferidos"] else "erro"] and print("Transação Concluida")
 
-fechar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] == "transação fechada" if transacoes["status"][transacoes["id"].index(id)] in ["dinheiro recebido", "fundos transferidos"] else "erro"
+fechar_transacao = lambda id,novaTransacao: novaTransacao["status"][novaTransacao["id"].index(id)] == "transação fechada" if novaTransacao["status"][novaTransacao["id"].index(id)] in ["dinheiro recebido", "fundos transferidos"] else "erro"
 
-cancelar_transacao = lambda id: transacoes["status"][transacoes["id"].index(id)] == "transação cancelada" if transacoes["status"][transacoes["id"].index(id)] == "pagamento não aprovado" else "erro"
+cancelar_transacao = lambda id,novaTransacao: novaTransacao["status"][novaTransacao["id"].index(id)] == "transação cancelada" if novaTransacao["status"][novaTransacao["id"].index(id)] == "pagamento não aprovado" else "erro"
 
-criar_usuario = lambda id, senha: (senhas["id"].append(id), senhas["senha"].append(senha), contas_correntes["id"].append(id), contas_correntes["saldo"].append(0), print("Usuário criado"))
+criar_conta_corrente = lambda id: contas_correntes(id, 0)
 
-atualizar_conta_corrente = lambda id, valor: [contas_correntes["saldo"].__setitem__(contas_correntes["id"].index(id), contas_correntes["saldo"][contas_correntes["id"].index(id)] + valor) if id in contas_correntes["id"] else "erro"] and print("Conta corrente atualizada")
+atualizar_conta_corrente = lambda novaConta,id, valor: [novaConta["saldo"].__setitem__(novaConta["id"].index(id), novaConta["saldo"][novaConta["id"].index(id)] + valor) if id in novaConta["id"] else "erro"] and print("Dinheiro recebido")
 
+#criar usuario
+print("Criando usuario")
+novoUsuario = usuarios(1,"senha123")
+print(novoUsuario)
 
-# # criar um usuário
-# criar_usuario(1, "senha123")
-# print(senhas)
-# print(contas_correntes)
+# criar uma conta
+print("Criando conta")
+novaConta = criar_conta_corrente(1)
+novaConta2 = criar_conta_corrente(2)
+
+print(novaConta)
 
 # criar uma transação de dinheiro
 print("Criando transação")
 novaTransacao = criar_transacao(1, "dinheiro")
 print(novaTransacao)
 
-# # atualizar a conta corrente do usuário
-# atualizar_conta_corrente(1, 100)
-# print(contas_correntes)
+# atualizar a conta corrente do usuário
+atualizar_conta_corrente(novaConta,1, 100)
+print(novaConta)
 
 # receber dinheiro para a transação
+print("Recebendo dinheiro")
 receber_dinheiro(1, novaTransacao)
 print(novaTransacao)
 
-# # imprimir recibo de pagamento
-# print(imprimir_recibo_pagamento(1))
+# imprimir recibo de pagamento
+print(imprimir_recibo_pagamento(1,novaTransacao))
 
-# # retornar recibo de pagamento
-# print(retornar_recibo_pagamento(1))
+# retornar recibo de pagamento
+print(retornar_recibo_pagamento(1,novaTransacao))
 
-# # completar a transação
-# completar_transacao(1)
-# print(transacoes)
+# completar a transação
+completar_transacao(1,novaTransacao)
+print(novaTransacao)
 
