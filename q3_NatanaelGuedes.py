@@ -7,7 +7,7 @@ conectar = lambda: mysql.connector.connect(
     database="av2Python"
 )
 
-# Criar tabelas
+# criar tabelas
 criar_tabelas = lambda conexao, tabelas: [conexao.cursor().execute(tabela) for tabela in tabelas] and print("tabelas criadas")
 
 declaracoes_tabelas = [
@@ -45,13 +45,13 @@ declaracoes_tabelas = [
     """
 ]
 
-# Inserir registros
+# inserir registros
 inserir = lambda conexao, tabela, valores: (conexao.cursor().execute(f"INSERT INTO {tabela} VALUES ({', '.join(['%s'] * len(valores))})", valores), conexao.commit()) and print("Dado adicionado")
 
-# Remover registros
+# remover registros
 remover = lambda conexao, tabela, condicao: (conexao.cursor().execute(f"DELETE FROM {tabela} WHERE {condicao}"), conexao.commit()) and print("Dado removido")
 
-# Consultar registros
+# consultar registros
 consultar = lambda conexao, tabela, condicao: (cursor := conexao.cursor(), cursor.execute(f"SELECT * FROM {tabela} WHERE {condicao}"), cursor.fetchall())[2]
 
 conexao = conectar()
